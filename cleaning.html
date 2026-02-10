@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Get an Instant Quote | Total Clean LLC</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: transparent;
+            margin: 0;
+            padding: 5px;
+            color: #404040;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .quote-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+            border: 1px solid #e1e1e1;
+            box-sizing: border-box;
+        }
+
+        /* --- ENCABEZADO --- */
+        .header-section {
+            background-color: #2F6CA3;
+            color: #ffffff;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .header-section h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: normal;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-section p {
+            margin-top: 8px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* --- FORMULARIO --- */
+        .form-body { padding: 20px; }
+
+        .section-title {
+            color: #2F6CA3;
+            font-size: 18px;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            margin-top: 25px;
+            font-weight: bold;
+        }
+        .section-title:first-of-type { margin-top: 0; }
+
+        /* GRID RESPONSIVO */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .col { flex: 1; min-width: 100%; } /* Por defecto móvil: 100% ancho */
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        /* Inputs más amigables al tacto */
+        input[type="text"], input[type="email"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px; /* Área de toque cómoda */
+            border: 1px solid #ccc;
+            background-color: #fafafa;
+            font-size: 16px; /* Evita zoom automático en iOS */
+            color: #333;
+            box-sizing: border-box;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            -webkit-appearance: none; /* Estilo nativo iOS limpio */
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2F6CA3;
+            background-color: #fff;
+        }
+
+        textarea { resize: vertical; min-height: 80px; }
+
+        /* --- SERVICIOS --- */
+        .service-wrapper {
+            margin-bottom: 12px;
+            border: 1px solid #eee;
+            background-color: #fcfcfc;
+            border-radius: 4px;
+        }
+
+        .service-card {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        input[type="checkbox"] { 
+            transform: scale(1.3); 
+            cursor: pointer; 
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .service-name { 
+            font-size: 15px; 
+            font-weight: bold; 
+            color: #333; 
+            line-height: 1.3;
+        }
+
+        .price-badge {
+            background-color: #70C656;
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 12px;
+            min-width: 60px;
+            text-align: center;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+        .price-badge.hidden { background-color: #eee; color: #999; }
+
+        /* --- WINDOWS GRID (RESPONSIVO) --- */
+        .sub-panel {
+            background-color: #f0f7ff;
+            border-top: 1px solid #e1efff;
+            padding: 15px;
+            display: none;
+        }
+        .sub-panel.active { display: block; }
+
+        .window-row {
+            display: flex;
+            flex-wrap: wrap; /* Permite que caigan en líneas nuevas en móvil */
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddeaf7;
+            padding-bottom: 15px;
+        }
+        .window-row:last-child { border-bottom: none; margin-bottom: 0; }
+        
+        .w-col-name { 
+            width: 100%; 
+            font-size: 14px; 
+            font-weight: bold; 
+            color: #2F6CA3; 
+            margin-bottom: 5px;
+        }
+        
+        .w-col-qty, .w-col-type {
+            flex: 1;
+        }
+
+        /* --- FOOTER & BOTONES --- */
+        .quote-footer {
+            background-color: #333;
+            color: white;
+            padding: 25px 15px;
+            text-align: center;
+        }
+
+        .total-amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: #70C656;
+            margin: 10px 0;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column; /* Móvil: Botones uno encima del otro */
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-pdf { background-color: #70C656; }
+        .btn-email { background-color: #2F6CA3; }
+
+        /* --- MEDIA QUERIES (TABLET & DESKTOP) --- */
+        @media (min-width: 600px) {
+            .col { min-width: 0; } /* Restaurar comportamiento flex normal */
+            
+            .window-row { flex-wrap: nowrap; border-bottom: 1px solid #e1efff; padding-bottom: 10px; }
+            .w-col-name { width: auto; flex: 2; margin-bottom: 0; color: #444; }
+            .w-col-qty { flex: 1; max-width: 80px; }
+            .w-col-type { flex: 2; }
+
+            .button-group { flex-direction: row; } /* Botones lado a lado */
+            .btn { width: auto; min-width: 200px; }
+            
+            .form-body { padding: 30px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="quote-container" id="quoteToPrint">
+    <div class="header-section">
+        <h2>Instant Quote</h2>
+        <p>Select services for an estimated price.</p>
+    </div>
+
+    <div class="form-body">
+        
+        <div class="section-title">1. Your Information</div>
+        <div class="row">
+            <div class="col">
+                <label>Full Name</label>
+                <input type="text" id="clientName" placeholder="John Doe">
+            </div>
+            <div class="col">
+                <label>Email Address</label>
+                <input type="email" id="clientEmail" placeholder="john@email.com">
+            </div>
+        </div>
+
+        <div class="section-title">2. Property Details</div>
+        <label>Select House Size/Type <span style="color:#d9534f">*</span></label>
+        <select id="houseType" onchange="updateDynamicPrices()">
+            <option value="none" selected>-- Select Property Type --</option>
+            <option value="town_mid">Townhouse (Middle Unit)</option>
+            <option value="town_end">Townhouse (End Unit)</option>
+            <option value="2000">Single House (Up to 2000 Sq Ft)</option>
+            <option value="2500">Single House (Up to 2500 Sq Ft)</option>
+            <option value="3000">Single House (Up to 3000 Sq Ft)</option>
+        </select>
+        
+        <div class="section-title">3. Select Services</div>
+
+        <div class="service-wrapper">
+            <div class="service-card">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check_housewash" onchange="calculateTotal()">
+                    <div>
+                        <span class="service-name">House Wash</span>
+                        <div style="font-size:11px; color:#888; margin-top:2px;">Soft wash siding/gutters</div>
+                    </div>
+                </label>
+                <span id="price_housewash" class="price-badge hidden">--</span>
+            </div>
+        </div>
+
+        <div class="service-wrapper">
+            <div class="service-card">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check_gutter" onchange="calculateTotal()">
+                    <div>
+                        <span class="service-name">Gutter Cleaning</span>
+                    </div>
+                </label>
+                <span id="price_gutter" class="price-badge hidden">--</span>
+            </div>
+        </div>
+
+        <div class="service-wrapper">
+            <div class="service-card">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check_window" onchange="togglePanel('panel_window'); calculateTotal()">
+                    <div>
+                        <span class="service-name">Window Cleaning</span>
+                        <div style="font-size:11px; color:#888; margin-top:2px;">Select types & qty</div>
+                    </div>
+                </label>
+                <span class="price-badge">Itemized</span>
+            </div>
+            
+            <div id="panel_window" class="sub-panel">
+                
+                <div class="window-row">
+                    <div class="w-col-name">Regular Windows</div>
+                    <div class="w-col-qty">
+                        <label style="font-size:10px;">Qty</label>
+                        <input type="number" id="qty_reg" placeholder="0" min="0" oninput="calculateTotal()">
+                    </div>
+                    <div class="w-col-type">
+                        <label style="font-size:10px;">Type</label>
+                        <select id="type_reg" onchange="calculateTotal()">
+                            <option value="15">Int & Ext ($15)</option>
+                            <option value="10">Ext Only ($10)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="window-row">
+                    <div class="w-col-name">Storm Windows</div>
+                    <div class="w-col-qty">
+                        <label style="font-size:10px;">Qty</label>
+                        <input type="number" id="qty_storm" placeholder="0" min="0" oninput="calculateTotal()">
+                    </div>
+                    <div class="w-col-type">
+                        <label style="font-size:10px;">Price</label>
+                        <select disabled style="background-color:#eee; color:#777;">
+                            <option>Fixed ($30)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="window-row">
+                    <div class="w-col-name">Slider Doors</div>
+                    <div class="w-col-qty">
+                        <label style="font-size:10px;">Qty</label>
+                        <input type="number" id="qty_slide" placeholder="0" min="0" oninput="calculateTotal()">
+                    </div>
+                    <div class="w-col-type">
+                        <label style="font-size:10px;">Type</label>
+                        <select id="type_slide" onchange="calculateTotal()">
+                            <option value="12">Int & Ext ($12)</option>
+                            <option value="8">Ext Only ($8)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="window-row">
+                    <div class="w-col-name">French Doors</div>
+                    <div class="w-col-qty">
+                        <label style="font-size:10px;">Qty</label>
+                        <input type="number" id="qty_french" placeholder="0" min="0" oninput="calculateTotal()">
+                    </div>
+                    <div class="w-col-type">
+                        <label style="font-size:10px;">Type</label>
+                        <select id="type_french" onchange="calculateTotal()">
+                            <option value="12">Int & Ext ($12)</option>
+                            <option value="8">Ext Only ($8)</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div style="margin-top:25px; margin-bottom:10px; font-weight:bold; color:#2F6CA3; font-size:16px;">Pressure Washing</div>
+        
+        <div class="service-wrapper">
+            <div class="service-card">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check_deck_wood" onchange="togglePanel('panel_wood'); calculateTotal()">
+                    <span class="service-name">Wood Deck</span>
+                </label>
+                <span class="price-badge">$0.75/sf</span>
+            </div>
+            <div id="panel_wood" class="sub-panel">
+                <label>Wood Deck Area (Sq Ft):</label>
+                <input type="number" id="sqft_wood" placeholder="e.g. 300" oninput="calculateTotal()">
+            </div>
+        </div>
+
+        <div class="service-wrapper">
+            <div class="service-card">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check_deck_comp" onchange="togglePanel('panel_comp'); calculateTotal()">
+                    <span class="service-name">Composite Deck</span>
+                </label>
+                <span class="price-badge">$0.65/sf</span>
+            </div>
+            <div id="panel_comp" class="sub-panel">
+                <label>Composite Deck Area (Sq Ft):</label>
+                <input type="number" id="sqft_comp" placeholder="e.g. 300" oninput="calculateTotal()">
+            </div>
+        </div>
+
+        <div class="service-wrapper">
+            <div class="service-card">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check_driveway" onchange="togglePanel('panel_drive'); calculateTotal()">
+                    <span class="service-name">Driveway / Sidewalks</span>
+                </label>
+                <span class="price-badge">$0.75/sf</span>
+            </div>
+            <div id="panel_drive" class="sub-panel">
+                <label>Driveway Area (Sq Ft):</label>
+                <input type="number" id="sqft_drive" placeholder="e.g. 600" oninput="calculateTotal()">
+            </div>
+        </div>
+
+        <div class="section-title">4. Additional Notes</div>
+        <textarea id="clientNotes" placeholder="Any special instructions or gate codes?"></textarea>
+
+    </div>
+
+    <div class="quote-footer">
+        <div style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#aaa;">Estimated Total</div>
+        <div id="totalDisplay" class="total-amount">$0.00</div>
+        
+        <p style="font-size:11px; color:#999; margin-bottom:20px; line-height:1.4;">
+            * Estimate only. Final price subject to on-site inspection.
+        </p>
+
+        <div class="button-group data-html2canvas-ignore">
+            <button class="btn btn-pdf" onclick="generatePDF()">Download PDF Quote</button>
+            <button class="btn btn-email" onclick="sendEmail()">Send to Total Clean</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* DATOS DE PRECIOS BASE */
+    const pricingDB = {
+        "town_mid": { hw: 200, gut: 120 },
+        "town_end": { hw: 250, gut: 140 },
+        "2000":     { hw: 300, gut: 180 },
+        "2500":     { hw: 350, gut: 200 },
+        "3000":     { hw: 400, gut: 220 },
+        "none":     { hw: 0,   gut: 0 }
+    };
+
+    /* ACTUALIZAR PRECIOS CASA/GUTTER */
+    function updateDynamicPrices() {
+        const type = document.getElementById('houseType').value;
+        const prices = pricingDB[type] || pricingDB["none"];
+
+        const hwBadge = document.getElementById('price_housewash');
+        const gutBadge = document.getElementById('price_gutter');
+
+        if (type !== "none") {
+            hwBadge.innerText = "$" + prices.hw;
+            hwBadge.classList.remove('hidden');
+            gutBadge.innerText = "$" + prices.gut;
+            gutBadge.classList.remove('hidden');
+        } else {
+            hwBadge.innerText = "--";
+            hwBadge.classList.add('hidden');
+            gutBadge.innerText = "--";
+            gutBadge.classList.add('hidden');
+        }
+        calculateTotal();
+    }
+
+    /* MOSTRAR/OCULTAR PANELES */
+    function togglePanel(panelID) {
+        const panel = document.getElementById(panelID);
+        let isChecked = false;
+
+        if (panelID === 'panel_window') isChecked = document.getElementById('check_window').checked;
+        if (panelID === 'panel_wood') isChecked = document.getElementById('check_deck_wood').checked;
+        if (panelID === 'panel_comp') isChecked = document.getElementById('check_deck_comp').checked;
+        if (panelID === 'panel_drive') isChecked = document.getElementById('check_driveway').checked;
+
+        if (isChecked) {
+            panel.classList.add('active');
+        } else {
+            panel.classList.remove('active');
+        }
+    }
+
+    /* CALCULO PRINCIPAL */
+    function calculateTotal() {
+        let total = 0;
+        
+        // 1. House & Gutters
+        const type = document.getElementById('houseType').value;
+        const prices = pricingDB[type] || pricingDB["none"];
+
+        if (document.getElementById('check_housewash').checked && type !== "none") total += prices.hw;
+        if (document.getElementById('check_gutter').checked && type !== "none") total += prices.gut;
+
+        // 2. Windows Logic
+        if (document.getElementById('check_window').checked) {
+            // Regular Windows
+            const qtyReg = parseInt(document.getElementById('qty_reg').value) || 0;
+            const priceReg = parseFloat(document.getElementById('type_reg').value);
+            total += (qtyReg * priceReg);
+
+            // Storm Windows
+            const qtyStorm = parseInt(document.getElementById('qty_storm').value) || 0;
+            total += (qtyStorm * 30);
+
+            // Slider Doors
+            const qtySlide = parseInt(document.getElementById('qty_slide').value) || 0;
+            const priceSlide = parseFloat(document.getElementById('type_slide').value);
+            total += (qtySlide * priceSlide);
+
+            // French Doors
+            const qtyFrench = parseInt(document.getElementById('qty_french').value) || 0;
+            const priceFrench = parseFloat(document.getElementById('type_french').value);
+            total += (qtyFrench * priceFrench);
+        }
+
+        // 3. Surfaces
+        if (document.getElementById('check_deck_wood').checked) {
+            total += (parseFloat(document.getElementById('sqft_wood').value) || 0) * 0.75;
+        }
+        if (document.getElementById('check_deck_comp').checked) {
+            total += (parseFloat(document.getElementById('sqft_comp').value) || 0) * 0.65;
+        }
+        if (document.getElementById('check_driveway').checked) {
+            total += (parseFloat(document.getElementById('sqft_drive').value) || 0) * 0.75;
+        }
+
+        document.getElementById('totalDisplay').innerText = "$" + total.toFixed(2);
+        return total.toFixed(2);
+    }
+
+    /* GENERAR PDF */
+    function generatePDF() {
+        const element = document.getElementById('quoteToPrint');
+        const clientName = document.getElementById('clientName').value || "Quote";
+        const opt = {
+            margin: 0.3,
+            filename: 'TotalClean_Estimate_' + clientName + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+
+    /* ENVIAR EMAIL */
+    function sendEmail() {
+        const total = document.getElementById('totalDisplay').innerText;
+        const name = document.getElementById('clientName').value;
+        const notes = document.getElementById('clientNotes').value;
+        const subject = "Estimate Request: " + name;
+        const body = `Hello Total Clean,%0D%0A%0D%0AI generated an estimate on your website:%0D%0A%0D%0AESTIMATED TOTAL: ${total}%0D%0A%0D%0AName: ${name}%0D%0ANotes: ${notes}%0D%0A%0D%0APlease contact me.`;
+        window.location.href = `mailto:info@totalcleanllc.com?subject=${subject}&body=${body}`;
+    }
+</script>
+
+</body>
+</html>
