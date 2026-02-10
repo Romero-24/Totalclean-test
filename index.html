@@ -539,7 +539,7 @@
         return total.toFixed(2);
     }
 
-    /* GENERAR PDF */
+    /* GENERAR PDF
     function generatePDF() {
         const element = document.getElementById('quoteToPrint');
         const clientName = document.getElementById('clientName').value || "Quote";
@@ -551,9 +551,9 @@
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
-    }
+    }*/
 
-    /* ENVIAR EMAIL */
+    /* ENVIAR EMAIL
     function sendEmail() {
         const total = document.getElementById('totalDisplay').innerText;
         const name = document.getElementById('clientName').value;
@@ -561,8 +561,9 @@
         const subject = "Estimate Request: " + name;
         const body = `Hello Total Clean,%0D%0A%0D%0AI generated an estimate on your website:%0D%0A%0D%0AESTIMATED TOTAL: ${total}%0D%0A%0D%0AName: ${name}%0D%0ANotes: ${notes}%0D%0A%0D%0APlease contact me.`;
         window.location.href = `mailto:info@totalcleanllc.com?subject=${subject}&body=${body}`;
-    }
+    }*/
 </script>
 
 </body>
 </html>
+
